@@ -1,0 +1,27 @@
+name: Generate Food Images
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run generation script
+        run: node generate.js
+        env:
+          TOGETHER_API_KEY: ${{ secrets.TOGETHER_API_KEY }}
+          
+      - name: Upload Images ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-food-images
+          path: images/
